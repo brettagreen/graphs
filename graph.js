@@ -98,6 +98,7 @@ class Graph {
 					for (let subPath of path.adjacent) {
 						if (!visited.has(subPath)) {
 							subPaths.push(subPath);
+							visited.add(subPath);
 						}
 					}
 				}
