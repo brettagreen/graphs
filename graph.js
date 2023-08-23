@@ -109,6 +109,34 @@ class Graph {
 
 		return walkTheGraph(paths, 1);
 	}
+
+	//can any node in this graph walk its way back to itself? 
+	//this method will tell you! (true/false)
+	 
+	isCyclic() {
+
+		function canIHazCyclical(nodes, visited, last=null) {
+			const subArray = [];
+			for (let node of nodes) {
+				visited.add(node);
+				let subNodes = node.adjacent;
+				for (let subNode of subNodes) {
+					if (!last) {
+						if (visited.has(subNode) && subNode !== last) {
+							return true;
+						}
+					}
+					subArray.push(subNode);
+				}
+				if (subArray.length > 0) {
+					return canIHazCyclical(subArray, visited, node);
+				}
+			}
+			return false;
+		}
+
+		return canIHazCyclical(this.nodes, new Set());
+	}
 	
 }
 
@@ -126,7 +154,7 @@ let T = new Node('T');
 let M = new Node('M');
 let Z = new Node('Z');
 
-graph.addNodes([S,P,U,X,Q,Y,V,R,W,T,M,Z])
+graph.addNodes([V,S,P,U,X,Q,Y,R,W,T,M,Z])
 
 graph.addEdge(S, P);
 graph.addEdge(S, U);
@@ -144,14 +172,13 @@ graph.addEdge(X, V);
 graph.addEdge(Q, Z);
 graph.addEdge(Z, M);
 graph.addEdge(M, R)
-//graph.addEdge(Y, R);
+graph.addEdge(Y, R);
 
 graph.addEdge(Y, W);
 graph.addEdge(V, W);
 
-//graph.addEdge(R, T);
+graph.addEdge(R, T);
 graph.addEdge(W, T);
 
-// this is one option:
-console.log(graph.shortestPath(S, R))
+console.log(graph.isCyclic())
 module.exports = {Graph, Node}
