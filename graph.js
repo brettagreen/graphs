@@ -121,9 +121,6 @@ class Graph {
 			
 			for (let subNode of subNodes) {
 				if (Array.from(subNode.adjacent).some(val => visited.has(val) && val !== last)) {
-					console.log('last', last.val);
-					console.log('subNode', subNode.val);
-					Array.from(subNode.adjacent).forEach(val => console.log(val.val))
 					return true;
 				} else {
 					Array.from(subNode.adjacent).forEach(val => {
@@ -136,6 +133,7 @@ class Graph {
 					return canIHazCyclical(subArray, visited, subNode);
 				}
 			}
+			return false;
 		}
 
 		let result;
@@ -173,29 +171,29 @@ graph.addEdge(T, Z);
 graph.addEdge(M, W);
 graph.addEdge(X, V);
 
-// graph.addEdge(W, R);
-// graph.addEdge(R, U);
+graph.addEdge(W, R);
+graph.addEdge(R, U);
 
-// graph.addEdge(P, Q);
-// graph.addEdge(U, Z);
+graph.addEdge(P, Q);
+graph.addEdge(U, Z);
 
-// graph.addEdge(P, Q);
-// graph.addEdge(U, V);
+graph.addEdge(P, Q);
+graph.addEdge(U, V);
 
-// graph.addEdge(X, Q);
-// graph.addEdge(X, Y);
-// graph.addEdge(X, V);
+graph.addEdge(X, Q);
+graph.addEdge(X, Y);
+graph.addEdge(X, V);
 
-// graph.addEdge(Q, Z);
-// graph.addEdge(Z, M);
-// graph.addEdge(M, R)
-// graph.addEdge(Y, R);
+graph.addEdge(Q, Z);
+graph.addEdge(Z, M);
+graph.addEdge(M, R)
+graph.addEdge(Y, R);
 
-// graph.addEdge(Y, W);
-// graph.addEdge(V, W);
+graph.addEdge(Y, W);
+graph.addEdge(V, W);
 
-// graph.addEdge(R, T);
-// graph.addEdge(W, T);
+graph.addEdge(R, T);
+graph.addEdge(W, T);
 
 console.log(graph.isCyclic())
 module.exports = {Graph, Node}
