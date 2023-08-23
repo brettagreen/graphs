@@ -115,29 +115,37 @@ class Graph {
 	 
 	isCyclic() {
 
-		function canIHazCyclical(nodes, visited, last=null) {
-			const subArray = [];
-			for (let node of nodes) {
-				visited.add(node);
-				let subNodes = node.adjacent;
-				for (let subNode of subNodes) {
-					if (!last) {
-						if (visited.has(subNode) && subNode !== last) {
-							return true;
+		function canIHazCyclical(subNodes, visited, last=null) {
+			let subArray = [];
+			visited.add(last);
+			
+			for (let subNode of subNodes) {
+				if (Array.from(subNode.adjacent).some(val => visited.has(val) && val !== last)) {
+					console.log('last', last.val);
+					console.log('subNode', subNode.val);
+					Array.from(subNode.adjacent).forEach(val => console.log(val.val))
+					return true;
+				} else {
+					Array.from(subNode.adjacent).forEach(val => {
+						if (!visited.has(val)) {
+							subArray.push(val);
 						}
-					}
-					subArray.push(subNode);
+					})
 				}
-				if (subArray.length > 0) {
-					return canIHazCyclical(subArray, visited, node);
+				if (subArray.length !== 0) {
+					return canIHazCyclical(subArray, visited, subNode);
 				}
 			}
-			return false;
 		}
 
-		return canIHazCyclical(this.nodes, new Set());
+		let result;
+		for (let node of this.nodes) {
+			result = canIHazCyclical(Array.from(node.adjacent), new Set(), node);
+			if (result) return result;
+		}
+
+		return false;
 	}
-	
 }
 
 let graph = new Graph()
@@ -156,29 +164,38 @@ let Z = new Node('Z');
 
 graph.addNodes([V,S,P,U,X,Q,Y,R,W,T,M,Z])
 
-graph.addEdge(S, P);
-graph.addEdge(S, U);
-
-graph.addEdge(P, X);
-graph.addEdge(U, X);
+graph.addEdge(V, S);
+graph.addEdge(R, U);
 
 graph.addEdge(P, Q);
-graph.addEdge(U, V);
+graph.addEdge(T, Z);
 
-graph.addEdge(X, Q);
-graph.addEdge(X, Y);
+graph.addEdge(M, W);
 graph.addEdge(X, V);
 
-graph.addEdge(Q, Z);
-graph.addEdge(Z, M);
-graph.addEdge(M, R)
-graph.addEdge(Y, R);
+// graph.addEdge(W, R);
+// graph.addEdge(R, U);
 
-graph.addEdge(Y, W);
-graph.addEdge(V, W);
+// graph.addEdge(P, Q);
+// graph.addEdge(U, Z);
 
-graph.addEdge(R, T);
-graph.addEdge(W, T);
+// graph.addEdge(P, Q);
+// graph.addEdge(U, V);
+
+// graph.addEdge(X, Q);
+// graph.addEdge(X, Y);
+// graph.addEdge(X, V);
+
+// graph.addEdge(Q, Z);
+// graph.addEdge(Z, M);
+// graph.addEdge(M, R)
+// graph.addEdge(Y, R);
+
+// graph.addEdge(Y, W);
+// graph.addEdge(V, W);
+
+// graph.addEdge(R, T);
+// graph.addEdge(W, T);
 
 console.log(graph.isCyclic())
 module.exports = {Graph, Node}
