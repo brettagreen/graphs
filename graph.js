@@ -89,7 +89,7 @@ class Graph {
 		let paths = Array.from(source.adjacent);
 		const visited = new Set(paths);
 		
-		function walkTheTree(paths, count) {
+		function walkTheGraph(paths, count) {
 			let subPaths = [];
 			for (let path of paths) {
 				if (path.adjacent.has(target)) {
@@ -104,10 +104,10 @@ class Graph {
 				}
 			} 
 			if (subPaths.length === 0) return 'no path to target';
-			return walkTheTree(subPaths, count + 1);
+			return walkTheGraph(subPaths, count + 1);
 		}
 
-		return walkTheTree(paths, 1);
+		return walkTheGraph(paths, 1);
 	}
 	
 }
