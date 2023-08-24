@@ -1,6 +1,6 @@
 const { Graph, Node } = require("./graph");
 
-describe("addVertex", function() {
+describe("addNode", function() {
   it("should add a key in the adjacency", function() {
     let graph = new Graph();
     let a = new Node("A");
@@ -9,16 +9,16 @@ describe("addVertex", function() {
     expect(graph.nodes.has(a)).toBe(false);
     expect(graph.nodes.has(b)).toBe(false);
     expect(graph.nodes.has(c)).toBe(false);
-    graph.addVertex(a);
-    graph.addVertex(b);
-    graph.addVertex(c);
+    graph.addNode(a);
+    graph.addNode(b);
+    graph.addNode(c);
     expect(graph.nodes.has(a)).toBe(true);
     expect(graph.nodes.has(b)).toBe(true);
     expect(graph.nodes.has(c)).toBe(true);
   });
 });
 
-describe("addVertices", function() {
+describe("addNodes", function() {
   it("should add multiple keys in the adjacency", function() {
     let graph = new Graph();
     let a = new Node("A");
@@ -27,7 +27,7 @@ describe("addVertices", function() {
     expect(graph.nodes.has(a)).toBe(false);
     expect(graph.nodes.has(b)).toBe(false);
     expect(graph.nodes.has(c)).toBe(false);
-    graph.addVertices([a, b, c]);
+    graph.addNodes([a, b, c]);
     expect(graph.nodes.has(a)).toBe(true);
     expect(graph.nodes.has(b)).toBe(true);
     expect(graph.nodes.has(c)).toBe(true);
@@ -41,7 +41,7 @@ describe("addEdge", function() {
     let b = new Node("B");
     let c = new Node("C");
     let d = new Node("D");
-    graph.addVertices([a, b, c, d]);
+    graph.addNodes([a, b, c, d]);
     graph.addEdge(a, b);
     graph.addEdge(a, c);
     graph.addEdge(b, d);
@@ -54,13 +54,13 @@ describe("addEdge", function() {
 });
 
 describe("removeEdge", function() {
-  it("should remove the vertices from the adjacency list", function() {
+  it("should remove the nodes from the adjacency list", function() {
     let graph = new Graph();
     let a = new Node("A");
     let b = new Node("B");
     let c = new Node("C");
     let d = new Node("D");
-    graph.addVertices([a, b, c, d]);
+    graph.addNodes([a, b, c, d]);
     graph.addEdge(a, b);
     graph.addEdge(a, c);
     graph.addEdge(b, d);
@@ -74,21 +74,24 @@ describe("removeEdge", function() {
   });
 });
 
-describe("removeVertex", function() {
-  it("should remove the vertex as well as any edges", function() {
+describe("removeNode", function() {
+  it("should remove the node as well as any edges", function() {
     let graph = new Graph();
     let a = new Node("A");
     let b = new Node("B");
     let c = new Node("C");
     let d = new Node("D");
-    graph.addVertices([a, b, c, d]);
+    graph.addNodes([a, b, c, d]);
     graph.addEdge(a, b);
     graph.addEdge(a, c);
     graph.addEdge(b, d);
     graph.addEdge(c, d);
 
-    graph.removeVertex(c);
-    graph.removeVertex(d);
+    graph.removeNode(c);
+    graph.removeNode(d);
+
+    expect(a.adjacent.has(c)).toBeFalsy()
+    expect(b.adjacent.has(d)).toBeFalsy()
 
     expect(graph.nodes.has(a)).toBeTruthy();
     expect(graph.nodes.has(b)).toBeTruthy();
@@ -99,7 +102,8 @@ describe("removeVertex", function() {
 
 describe("DFS", function() {
   it("return an array of the nodes searched using DFS", function() {
-    let graph = new Graph();
+
+    const graph = new Graph();
     let S = new Node("S");
     let P = new Node("P");
     let U = new Node("U");
@@ -110,45 +114,45 @@ describe("DFS", function() {
     let R = new Node("R");
     let W = new Node("W");
     let T = new Node("T");
-
-    graph.addVertices([S, P, U, X, Q, Y, V, R, W, T]);
-
+    let Z = new Node("Z");
+    
+    graph.addNodes([S, P, U, X, Q, Y, V, R, W, T, Z]);
+    
     graph.addEdge(S, P);
     graph.addEdge(S, U);
-
+    
     graph.addEdge(P, X);
     graph.addEdge(U, X);
-
+    
     graph.addEdge(P, Q);
     graph.addEdge(U, V);
-
+    
     graph.addEdge(X, Q);
     graph.addEdge(X, Y);
     graph.addEdge(X, V);
-
+    
     graph.addEdge(Q, R);
     graph.addEdge(Y, R);
-
+    
     graph.addEdge(Y, W);
     graph.addEdge(V, W);
-
+    
     graph.addEdge(R, T);
-    graph.addEdge(W, T);
+    graph.addEdge(W, Z);
+    graph.addEdge(Z, T);
 
-    var result = JSON.stringify(graph.depthFirstSearch(S));
-    var validResult =
-      result ===
-        JSON.stringify(["S", "U", "V", "W", "T", "R", "Q", "Y", "X", "P"]) ||
-      result ===
-        JSON.stringify(["S", "P", "X", "U", "V", "W", "Y", "R", "Q", "T"]);
-
-    expect(validResult).toBe(true);
+    expect(graph.depthFirstSearch(S)).toEqual([
+        'S', 'U', 'V', 'W',
+        'Z', 'T', 'R', 'Q',
+        'Y', 'X', 'P'
+      ]);
   });
 });
 
 describe("BFS", function() {
   it("should return an array of the nodes searched using BFS", function() {
-    let graph = new Graph();
+
+    const graph = new Graph();
     let S = new Node("S");
     let P = new Node("P");
     let U = new Node("U");
@@ -159,42 +163,159 @@ describe("BFS", function() {
     let R = new Node("R");
     let W = new Node("W");
     let T = new Node("T");
-
-    graph.addVertices([S, P, U, X, Q, Y, V, R, W, T]);
-
+    let Z = new Node("Z");
+    
+    graph.addNodes([S, P, U, X, Q, Y, V, R, W, T, Z]);
+    
     graph.addEdge(S, P);
     graph.addEdge(S, U);
-
+    
     graph.addEdge(P, X);
     graph.addEdge(U, X);
-
+    
     graph.addEdge(P, Q);
     graph.addEdge(U, V);
-
+    
     graph.addEdge(X, Q);
     graph.addEdge(X, Y);
     graph.addEdge(X, V);
-
+    
     graph.addEdge(Q, R);
     graph.addEdge(Y, R);
-
+    
     graph.addEdge(Y, W);
     graph.addEdge(V, W);
-
+    
     graph.addEdge(R, T);
-    graph.addEdge(W, T);
+    graph.addEdge(W, Z);
+    graph.addEdge(Z, T);
 
     expect(graph.breadthFirstSearch(S)).toEqual([
-      "S",
-      "P",
-      "U",
-      "X",
-      "Q",
-      "V",
-      "Y",
-      "R",
-      "W",
-      "T"
-    ]);
+        'S', 'P', 'U', 'X',
+        'Q', 'V', 'Y', 'R',
+        'W', 'T', 'Z'
+      ]);
   });
 });
+
+describe("shortestPath", function() {
+  it("returns shortest path from START node to TARGET node", function() {
+
+    const graph = new Graph();
+    let S = new Node("S");
+    let P = new Node("P");
+    let U = new Node("U");
+    let X = new Node("X");
+    let Q = new Node("Q");
+    let Y = new Node("Y");
+    let V = new Node("V");
+    let R = new Node("R");
+    let W = new Node("W");
+    let T = new Node("T");
+    let Z = new Node("Z");
+    
+    graph.addNodes([S, P, U, X, Q, Y, V, R, W, T, Z]);
+    
+    graph.addEdge(S, P);
+    graph.addEdge(S, U);
+    
+    graph.addEdge(P, X);
+    graph.addEdge(U, X);
+    
+    graph.addEdge(P, Q);
+    graph.addEdge(U, V);
+    
+    graph.addEdge(X, Q);
+    graph.addEdge(X, Y);
+    graph.addEdge(X, V);
+    
+    graph.addEdge(Q, R);
+    graph.addEdge(Y, R);
+    
+    graph.addEdge(Y, W);
+    graph.addEdge(V, W);
+    
+    graph.addEdge(R, T);
+    graph.addEdge(W, Z);
+    graph.addEdge(Z, T);
+
+    expect(graph.shortestPath(S, T)).toEqual(4);
+    expect(graph.shortestPath(S, X)).toEqual(2);
+    graph.removeEdge(W, Z);
+    graph.removeEdge(Z, T);
+    expect(graph.shortestPath(S, Z)).toEqual('no path to target');
+  });
+});
+
+describe("isCyclic", function() {
+    it("returns true if graph is cyclic, false if not", function() {
+  
+      let graph = new Graph();
+      let S = new Node("S");
+      let P = new Node("P");
+      let U = new Node("U");
+      let X = new Node("X");
+      let Q = new Node("Q");
+      let Y = new Node("Y");
+      let V = new Node("V");
+      let R = new Node("R");
+      let W = new Node("W");
+      let T = new Node("T");
+      let Z = new Node("Z");
+      
+      graph.addNodes([S, P, U, X, Q, Y, V, R, W, T, Z]);
+      
+      graph.addEdge(S, P);
+      graph.addEdge(S, U);
+      
+      graph.addEdge(P, X);
+      graph.addEdge(U, X);
+      
+      graph.addEdge(P, Q);
+      graph.addEdge(U, V);
+      
+      graph.addEdge(X, Q);
+      graph.addEdge(X, Y);
+      graph.addEdge(X, V);
+      
+      graph.addEdge(Q, R);
+      graph.addEdge(Y, R);
+      
+      graph.addEdge(Y, W);
+      graph.addEdge(V, W);
+      
+      graph.addEdge(R, T);
+      graph.addEdge(W, Z);
+      graph.addEdge(Z, T);
+  
+      expect(graph.isCyclic()).toEqual(true);
+
+      graph = new Graph();
+      S = new Node("S");
+      P = new Node("P");
+      U = new Node("U");
+      X = new Node("X");
+      Q = new Node("Q");
+      Y = new Node("Y");
+      V = new Node("V");
+      R = new Node("R");
+      W = new Node("W");
+      T = new Node("T");
+      Z = new Node("Z");
+
+      graph.addNodes([S, P, U, X, Q, Y, V, R, W, T, Z]);
+
+      graph.addEdge(S, Z);
+      graph.addEdge(P, X);
+      graph.addEdge(P, Q);
+      graph.addEdge(U, V);
+      graph.addEdge(X, Y);
+      graph.addEdge(Y, R);
+      graph.addEdge(V, W);
+      graph.addEdge(R, T);
+      graph.addEdge(W, Z);
+
+      expect(graph.isCyclic()).toEqual(false);
+    });
+  });
+  

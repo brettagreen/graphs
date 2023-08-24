@@ -83,7 +83,6 @@ class Graph {
 	}
 
 	//returns length of shortest path from source node to target node
-
 	shortestPath(source, target) {
 		if (source.adjacent.has(target)) return 1;
 		let paths = Array.from(source.adjacent);
@@ -112,7 +111,6 @@ class Graph {
 
 	//can any node in this graph walk its way back to itself? 
 	//this method will tell you! (true/false)
-	 
 	isCyclic() {
 
 		function canIHazCyclical(subNodes, visited, last=null) {
@@ -146,54 +144,4 @@ class Graph {
 	}
 }
 
-let graph = new Graph()
-let S = new Node('S');
-let P = new Node('P');
-let U = new Node('U');
-let X = new Node('X');
-let Q = new Node('Q');
-let Y = new Node('Y');
-let V = new Node('V');
-let R = new Node('R');
-let W = new Node('W');
-let T = new Node('T');
-let M = new Node('M');
-let Z = new Node('Z');
-
-graph.addNodes([V,S,P,U,X,Q,Y,R,W,T,M,Z])
-
-graph.addEdge(V, S);
-graph.addEdge(R, U);
-
-graph.addEdge(P, Q);
-graph.addEdge(T, Z);
-
-graph.addEdge(M, W);
-graph.addEdge(X, V);
-
-graph.addEdge(W, R);
-graph.addEdge(R, U);
-
-graph.addEdge(P, Q);
-graph.addEdge(U, Z);
-
-graph.addEdge(P, Q);
-graph.addEdge(U, V);
-
-graph.addEdge(X, Q);
-graph.addEdge(X, Y);
-graph.addEdge(X, V);
-
-graph.addEdge(Q, Z);
-graph.addEdge(Z, M);
-graph.addEdge(M, R)
-graph.addEdge(Y, R);
-
-graph.addEdge(Y, W);
-graph.addEdge(V, W);
-
-graph.addEdge(R, T);
-graph.addEdge(W, T);
-
-console.log(graph.isCyclic())
 module.exports = {Graph, Node}
